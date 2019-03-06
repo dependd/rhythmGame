@@ -5,6 +5,8 @@ using UnityEngine;
 public class ButtonScripts : MonoBehaviour {
 
     [SerializeField] GameObject startButton;
+    [SerializeField] StartGame sg;
+    [SerializeField] NoteTimingMaker note;
 	// Use this for initialization
 	void Start () {
 		
@@ -17,6 +19,8 @@ public class ButtonScripts : MonoBehaviour {
     public void GameStart()
     {
         startButton.SetActive(false);
+        note.StartMusic();
+        sg.BGMStart();
         //レーンをアクティブ化
         //該当の譜面をサーチ
         //ゲームスタート
