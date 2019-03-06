@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonScripts : MonoBehaviour {
 
@@ -16,7 +17,7 @@ public class ButtonScripts : MonoBehaviour {
 	void Update () {
 		
 	}
-    public void GameStart()
+    public void TimingStart()
     {
         startButton.SetActive(false);
         note.StartMusic();
@@ -24,5 +25,13 @@ public class ButtonScripts : MonoBehaviour {
         //レーンをアクティブ化
         //該当の譜面をサーチ
         //ゲームスタート
+    }
+    public void GameStart()
+    {
+        GameObject.Find("SceneManager").GetComponent<SceneManage>().ChangeScene();
+    }
+    public void Test()
+    {
+        GameObject.Find("SceneManager").GetComponent<SceneManage>().Test();
     }
 }
