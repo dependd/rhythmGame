@@ -13,28 +13,42 @@ public class GameControlor : MonoBehaviour {
 
     public string filePass;
     private int _notesCount = 0;
-
-    [SerializeField]private AudioSource _audioSource;
+    
     private float _startTime = 0;
 
     public float timeOffset = -1;
-    
 
+    private bool _isPlaying = false;
+    public GameObject startButton;
+
+    float timing;
+    public int highSpeed;
 
     void Start()
     {
+        InstanceTiming(highSpeed);
         _timing = new float[1024];
         _lineNum = new int[1024];
-        audioSource.clip = clips[0];
-        audioSource.Play();
         LoadCSV();
+        StartGame();
     }
 
     void Update()
     {
-        CheckNextNotes();
+        if (_isPlaying)
+        {
+            CheckNextNotes();
+        }
+
     }
-    
+
+    public void StartGame()
+    {
+        //startButton.SetActive(false);
+        _startTime = Time.time;
+        audioSource.Play();
+        _isPlaying = true;
+    }
 
     void CheckNextNotes()
     {
@@ -47,9 +61,7 @@ public class GameControlor : MonoBehaviour {
 
     void SpawnNotes(int num)
     {
-        Instantiate(notes[num],
-            new Vector3(-4.0f + (2.0f * num), 10.0f, 0),
-            Quaternion.identity);
+        Instantiate(notes[num],new Vector3(-4.0f + (2.0f * num), 9.0f, 0), Quaternion.identity);
     }
 
     void LoadCSV()
@@ -67,10 +79,37 @@ public class GameControlor : MonoBehaviour {
             string[] values = line.Split(',');
             for (int j = 0; j < values.Length; j++)
             {
-                _timing[i] = float.Parse(values[0]);
+                _timing[i] = float.Parse(values[0]) + timing;
                 _lineNum[i] = int.Parse(values[1]);
             }
             i++;
+        }
+    }
+
+    private void InstanceTiming(int hs)
+    {
+        //hs10 = timing-0.4f
+        //hs5 = timing-1.5f
+        switch (hs)
+        {
+            case 5:
+                timing = -1.5f;
+                break;
+            case 6:
+                timing = -1.05f;
+                break;
+            case 7:
+                timing = -0.8f;
+                break;
+            case 8:
+                timing = -0.65f;
+                break;
+            case 9:
+                timing = -0.5f;
+                break;
+            case 10:
+                timing = -0.4f;
+                break;
         }
     }
 
