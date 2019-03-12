@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class GameControlor : MonoBehaviour {
 
+    [SerializeField] UIManager _UIManager;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip[] clips;
     public GameObject[] notes;
     private float[] _timing;
     private int[] _lineNum;
+    private int combo = 0;
 
     public string filePass;
     private int _SpawndNotesCount = 0;
@@ -64,43 +66,58 @@ public class GameControlor : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
-            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 0)
+            if (CheckNoteTiming(0))
             {
                 Debug.Log("line0 == true");
                 Destroy(GameObject.Find("Note(Clone)" + 0));
-                _LineCheckNoteCount++;
+                _LineCheckNoteCount++; _UIManager.ComboCount(combo);
             }
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] ==1)
+            if (CheckNoteTiming(1))
             {
-                Debug.Log("line1 == true"); Destroy(GameObject.Find("Note(Clone)" + 1));
+                Debug.Log("line1 == true"); Destroy(GameObject.Find("Note(Clone)" + 1)); _UIManager.ComboCount(combo);
                 _LineCheckNoteCount++;
             }
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 2)
+            if (CheckNoteTiming(2))
             {
-                Debug.Log("line2 == true"); Destroy(GameObject.Find("Note(Clone)" + 2)); _LineCheckNoteCount++;
+                Debug.Log("line2 == true"); Destroy(GameObject.Find("Note(Clone)" + 2)); _LineCheckNoteCount++; _UIManager.ComboCount(combo);
             }
         }
         if (Input.GetKeyDown(KeyCode.J))
         {
-            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 3)
+            if (CheckNoteTiming(3))
             {
                 _LineCheckNoteCount++;
-                Debug.Log("line3 == true"); Destroy(GameObject.Find("Note(Clone)" +3));
+                Debug.Log("line3 == true"); Destroy(GameObject.Find("Note(Clone)" +3)); _UIManager.ComboCount(combo);
             }
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 4)
+            if (CheckNoteTiming(4))
             {
-                Debug.Log("line4 == true"); Destroy(GameObject.Find("Note(Clone)" + 4)); _LineCheckNoteCount++;
+                Debug.Log("line4 == true"); Destroy(GameObject.Find("Note(Clone)" + 4)); _LineCheckNoteCount++;_UIManager.ComboCount(combo);
+
             }
         }
+    }
+    bool CheckNoteTiming(int num)
+    {
+        if(_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == num)
+        {
+            combo++;
+            return true;
+        }
+        return false;
+    }
+
+    void ComboCount()
+    {
+
     }
 
     void SpawnNotes(int num)
