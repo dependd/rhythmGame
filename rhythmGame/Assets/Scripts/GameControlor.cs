@@ -12,7 +12,8 @@ public class GameControlor : MonoBehaviour {
     private int[] _lineNum;
 
     public string filePass;
-    private int _notesCount = 0;
+    private int _SpawndNotesCount = 0;
+    public int _LineCheckNoteCount = 0;
     
     private float _startTime = 0;
 
@@ -38,6 +39,7 @@ public class GameControlor : MonoBehaviour {
         if (_isPlaying)
         {
             CheckNextNotes();
+            CheckKey();
         }
 
     }
@@ -52,16 +54,58 @@ public class GameControlor : MonoBehaviour {
 
     void CheckNextNotes()
     {
-        while (_timing[_notesCount] + timeOffset < GetMusicTime() && _timing[_notesCount] != 0)
+        while (_timing[_SpawndNotesCount] + timeOffset < GetMusicTime() && _timing[_SpawndNotesCount] != 0)
         {
-            SpawnNotes(_lineNum[_notesCount]);
-            _notesCount++;
+            SpawnNotes(_lineNum[_SpawndNotesCount]);
+            _SpawndNotesCount++;
+        }
+    }
+    private void CheckKey()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 0)
+            {
+                Debug.Log("line0 == true");
+                Destroy(GameObject.Find("Note(Clone)" + 0));
+                _LineCheckNoteCount++;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] ==1)
+            {
+                Debug.Log("line1 == true"); Destroy(GameObject.Find("Note(Clone)" + 1));
+                _LineCheckNoteCount++;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 2)
+            {
+                Debug.Log("line2 == true"); Destroy(GameObject.Find("Note(Clone)" + 2)); _LineCheckNoteCount++;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 3)
+            {
+                _LineCheckNoteCount++;
+                Debug.Log("line3 == true"); Destroy(GameObject.Find("Note(Clone)" +3));
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == 4)
+            {
+                Debug.Log("line4 == true"); Destroy(GameObject.Find("Note(Clone)" + 4)); _LineCheckNoteCount++;
+            }
         }
     }
 
     void SpawnNotes(int num)
     {
-        Instantiate(notes[num],new Vector3(-4.0f + (2.0f * num), 9.0f, 0), Quaternion.identity);
+        Instantiate(notes[num],new Vector3(-4.0f + (2.0f * num), 9.0f, 0), Quaternion.identity).name += num;
     }
 
     void LoadCSV()
@@ -74,7 +118,7 @@ public class GameControlor : MonoBehaviour {
         int i = 0;
         while (reader.Peek() > -1)
         {
-
+            
             string line = reader.ReadLine();
             string[] values = line.Split(',');
             for (int j = 0; j < values.Length; j++)

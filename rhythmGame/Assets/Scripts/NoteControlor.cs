@@ -19,6 +19,7 @@ public class NoteControlor : MonoBehaviour {
         if(transform.position.y <= -5.0f)
         {
             Debug.Log(false);
+            controlor._LineCheckNoteCount++;
             Destroy(this.gameObject);
         }
 	}
