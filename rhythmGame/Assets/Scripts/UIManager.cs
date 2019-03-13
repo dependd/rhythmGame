@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 
     [SerializeField] Text _comboText;
+    [SerializeField] Slider _ScoreSlider;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,5 +19,9 @@ public class UIManager : MonoBehaviour {
     public void ComboCount(int num)
     {
         _comboText.text = num.ToString();
+    }
+    public void ScoreUp(int score)
+    {
+        _ScoreSlider.value += score;
     }
 }
