@@ -18,6 +18,7 @@ public class NoteControlor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transform.position += Vector3.down * hs * Time.deltaTime;
+        
         if(transform.position.y <= -5.0f)
         {
             Debug.Log(false);

@@ -73,17 +73,16 @@ public class GameControlor : MonoBehaviour {
             if (CheckNoteTiming(0,NoteLine[0]))
             {
                 Debug.Log("line0 == true");
-                Destroy(GameObject.Find("Note(Clone)" + 0));
                 SuccessTap();
             }
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
+            //Debug.Log(GetMusicTime());
             if (NoteLine[1].transform.childCount == 0) return;
             if (CheckNoteTiming(1,NoteLine[1]))
             {
                 Debug.Log("line1 == true");
-                Destroy(GameObject.Find("Note(Clone)" + 1));
                 SuccessTap();
             }
         }
@@ -93,17 +92,16 @@ public class GameControlor : MonoBehaviour {
             if (CheckNoteTiming(2,NoteLine[2]))
             {
                 Debug.Log("line2 == true");
-                Destroy(GameObject.Find("Note(Clone)" + 2));
                 SuccessTap();
             }
         }
         if (Input.GetKeyDown(KeyCode.J))
         {
+            //Debug.Log(GetMusicTime());
             if (NoteLine[3].transform.childCount == 0) return;
             if (CheckNoteTiming(3,NoteLine[3]))
             {
                 Debug.Log("line3 == true");
-                Destroy(GameObject.Find("Note(Clone)" +3));
                 SuccessTap();
             }
         }
@@ -113,8 +111,13 @@ public class GameControlor : MonoBehaviour {
             if (CheckNoteTiming(4,NoteLine[4]))
             {
                 Debug.Log("line4 == true");
-                Destroy(GameObject.Find("Note(Clone)" + 4));
                 SuccessTap();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            foreach(Object i in NoteLine[1].transform){
+                Debug.Log(i);
             }
         }
     }
@@ -123,6 +126,7 @@ public class GameControlor : MonoBehaviour {
         _LineCheckNoteCount++;
         _UIManager.ComboCount(combo);
         _UIManager.ScoreUp(score);
+        Destroy(GameObject.Find("Note(Clone)" + _SpawndNotesCount));
     }
 
 
@@ -151,7 +155,7 @@ public class GameControlor : MonoBehaviour {
     void SpawnNotes(int num)
     {
         var obj = Instantiate(notes[num],new Vector3(-4.0f + (2.0f * num), 9.0f, 0), Quaternion.identity);
-        obj.name += num;
+        obj.name += _SpawndNotesCount;
         obj.transform.parent = NoteLine[num].transform;
         obj.GetComponent<NoteControlor>().timing = _timing[_SpawndNotesCount];
     }
