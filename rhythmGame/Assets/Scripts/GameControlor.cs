@@ -8,6 +8,7 @@ public class GameControlor : MonoBehaviour {
     [SerializeField] UIManager _UIManager;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip[] clips;
+    [SerializeField] GameObject[] NoteLine;
     public int score;
     public GameObject[] notes;
     private float[] _timing;
@@ -35,6 +36,7 @@ public class GameControlor : MonoBehaviour {
         _lineNum = new int[1024];
         LoadCSV();
         StartGame();
+        score = 0;
     }
 
     void Update()
@@ -67,67 +69,77 @@ public class GameControlor : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
-            if (CheckNoteTiming(0))
+            if (NoteLine[0].transform.childCount == 0) return;
+            if (CheckNoteTiming(0,NoteLine[0]))
             {
                 Debug.Log("line0 == true");
                 Destroy(GameObject.Find("Note(Clone)" + 0));
-                _LineCheckNoteCount++;
-                _UIManager.ComboCount(combo);
-                _UIManager.ScoreUp(score);
+                SuccessTap();
             }
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if (CheckNoteTiming(1))
+            if (NoteLine[1].transform.childCount == 0) return;
+            if (CheckNoteTiming(1,NoteLine[1]))
             {
                 Debug.Log("line1 == true");
                 Destroy(GameObject.Find("Note(Clone)" + 1));
-                _UIManager.ComboCount(combo);
-                _LineCheckNoteCount++;
-                _UIManager.ScoreUp(score);
+                SuccessTap();
             }
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (CheckNoteTiming(2))
+            if (NoteLine[2].transform.childCount == 0) return;
+            if (CheckNoteTiming(2,NoteLine[2]))
             {
                 Debug.Log("line2 == true");
                 Destroy(GameObject.Find("Note(Clone)" + 2));
-                _LineCheckNoteCount++;
-                _UIManager.ComboCount(combo);
-                _UIManager.ScoreUp(score);
+                SuccessTap();
             }
         }
         if (Input.GetKeyDown(KeyCode.J))
         {
-            if (CheckNoteTiming(3))
+            if (NoteLine[3].transform.childCount == 0) return;
+            if (CheckNoteTiming(3,NoteLine[3]))
             {
-                _LineCheckNoteCount++;
                 Debug.Log("line3 == true");
                 Destroy(GameObject.Find("Note(Clone)" +3));
-                _UIManager.ComboCount(combo);
-                _UIManager.ScoreUp(score);
+                SuccessTap();
             }
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            if (CheckNoteTiming(4))
+            if (NoteLine[4].transform.childCount == 0) return;
+            if (CheckNoteTiming(4,NoteLine[4]))
             {
                 Debug.Log("line4 == true");
                 Destroy(GameObject.Find("Note(Clone)" + 4));
-                _LineCheckNoteCount++;
-                _UIManager.ComboCount(combo);
-                _UIManager.ScoreUp(score);
+                SuccessTap();
             }
         }
     }
-    bool CheckNoteTiming(int num)
+    void SuccessTap()
     {
-        if(_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == num)
+        _LineCheckNoteCount++;
+        _UIManager.ComboCount(combo);
+        _UIManager.ScoreUp(score);
+    }
+
+
+    bool CheckNoteTiming(int num,GameObject lineObj)
+    {
+        if(lineObj.GetComponentInChildren<NoteControlor>().timing + timeOffset < GetMusicTime() + 0.5f && lineObj.GetComponentInChildren<NoteControlor>().timing + timeOffset < GetMusicTime() - 0.5f && _lineNum[_LineCheckNoteCount] == num)
         {
             combo++;
+            score += 3000;
             return true;
         }
+        //if (_timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() + 1 && _timing[_LineCheckNoteCount] + timeOffset < GetMusicTime() - 1 && _lineNum[_LineCheckNoteCount] == num)
+        //{
+        //    combo++;
+        //    score += 3000;
+        //    return true;
+        //}
         return false;
     }
 
@@ -138,7 +150,10 @@ public class GameControlor : MonoBehaviour {
 
     void SpawnNotes(int num)
     {
-        Instantiate(notes[num],new Vector3(-4.0f + (2.0f * num), 9.0f, 0), Quaternion.identity).name += num;
+        var obj = Instantiate(notes[num],new Vector3(-4.0f + (2.0f * num), 9.0f, 0), Quaternion.identity);
+        obj.name += num;
+        obj.transform.parent = NoteLine[num].transform;
+        obj.GetComponent<NoteControlor>().timing = _timing[_SpawndNotesCount];
     }
 
     void LoadCSV()
